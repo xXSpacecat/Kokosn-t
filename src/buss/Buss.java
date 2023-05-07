@@ -189,6 +189,7 @@ public class Buss {
     
     static void mindre(){
         System.out.println("Passagerare under 18 år:");
+        //som på resterande platser så sker här en jämförelse där om personnumret vid en plats är under myndighetsgränsen så skrivs den ut
         for(int i = 0; i < persfält.length;i++){  
             if (persfält[i]>20060000){
             System.out.println("Plats " + i + ": " + persfält[i]);   
@@ -201,6 +202,7 @@ public class Buss {
     
      static void större(){
         System.out.println("Passagerare över 18 år:");
+        //Det här är samma sak som övre metoden bara att den skriver ut de som är över 18 år
         for(int i = 0; i < persfält.length;i++){  
             if (persfält[i]<20060000 && persfält[i]!=0){
     System.out.println("Plats " + i + ": " + persfält[i]);         
@@ -214,11 +216,13 @@ public class Buss {
      
      
      static void hittaplats(int pnummer){
+         //Hittar platsen genom att jämföra i en ifsats med hjälp av en forloop
          for(int i = 0; i< persfält.length;i++){
             if (pnummer == persfält[i]){
                 System.out.println("Du har plats "+ i);
                 break;
             }
+            //För att skicka ut medelandet om plats som inte finns bara ska ske en gång och inte för varje plats den checkar.
         if(i>=20 && persfält[i]!= pnummer){
             
                 System.out.println("Ingen bokning med personnummret "+pnummer+" har hittats");
@@ -232,7 +236,9 @@ public class Buss {
       static double vinsten(int antal) {
     double nyVinst = 0;
     if (antal > 0) {
+        //Här så kollas åldern på passageraren, antalet är hur många platser det finns i bussen
         if (persfält[antal - 1] != 0  && persfält[antal-1]<19540000) { 
+            //När rätt ålder hittats så kommer vinsten öka med respektive pris och sedan lägga till det som den får ut av att köra metoden igen tills inte platserna i bussen tar slut.
             antal--;
             nyVinst = 199.90 + vinsten(antal);         
         } 
@@ -245,6 +251,7 @@ public class Buss {
             nyVinst = 299.90 + vinsten(antal);  
         }
         else {
+            //Om platsen är tom ska den fortfarande kolla igenom nästa plats genom att köra om metoden med nytt antal
             antal--;
             nyVinst = vinsten(antal); 
         }
