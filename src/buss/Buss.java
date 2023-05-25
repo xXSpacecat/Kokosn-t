@@ -26,10 +26,10 @@ public class Buss {
         
         //tänkte vara lite praktisk i mina namngivningar den här gången då det *kanske* kan ses som mer praktiskt
         Scanner input = new Scanner(System.in);
-        try{
+        
         while (!avstngd) {
             // Då det är ett val typ av system så va det bara logiskt att använda ett switch case här för att sedan leda de till sina respektive metoder
-            
+            try{
             System.out.print("Buss Boknings Meny:\n(1) Boka \n(2) Lista bokade \n(3) Avboka \n(4) Skriv ut total vinst\n(5) Lista obokade platser \n(6) Hitta din plats\n(7) Stäng av\nVad vill du göra?:");
 
             int val = input.nextInt();
@@ -124,10 +124,11 @@ public class Buss {
                     
             }
             
-        }}catch(Exception e){
+        }catch(Exception e){
                     System.out.println("Jag förstod inte riktigt, snälla försök igen");                           
                     }
-    }
+            input.nextLine();
+    }}
 
     static int bokningV(int[] fält) {
         //den här metoden kommer vara det som tar in personnumret som sedan  kommer användas i bokningen
