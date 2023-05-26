@@ -17,6 +17,7 @@ public class Buss {
      */
   
     //Eftersom att jag vill använda dessa genom hela koden så skriver jag ut de som globala
+    static String[] namnFält = new String[21];
     static int[] persfält = new int[21];
     static boolean fnstr = false;
 
@@ -37,39 +38,17 @@ public class Buss {
             switch (val) {
                 case 1:
                  //Jag tror jag kunde stoppat in det här i en metod men nu är det för sent
-                    System.out.println("Vill du ha en fönsterplats? (y/n)");
-                    String fnstrPlts = input.next();
-                    
-                    //Här så kollar jag om de ska ha fönsterpats eller inte, jag använder equals eftersom att jag vill använda ignorecase för jagg tror att det skulle vara jobbigare om jag använde den där == operatoren
-                    if (fnstrPlts.equalsIgnoreCase("y")) {
-                        fnstr = true;
-                    } else if (fnstrPlts.equalsIgnoreCase("n")) {
-                        fnstr = false;
-                    } else {
-                        continue;
-                    }
-                    //Med hjälp av denna metod kan jag se om det finns lediga platser, för fönsterplats respektive gångplats, det skulle vara onödigt att fortsätta om det inte fanns några platser kvar.
-                    int ledigPlatsIndex = ledigPlats();
+                        System.out.println("Vill du ha en fönsterplats? (y/n)");
+                        String fnstrPlts = input.next();
 
-                    if (ledigPlatsIndex == -1) {
-                        System.out.println("Det finns tyvärr inga lediga platser.");
-                    } else {
-                        //Här sker äntligen självaste boknningen
-                        int personnummer = bokningV(persfält);
-                        //Istället för en if statement använder jag dessa operatorer som kollar om något är sant eller falskt och använder av den 'value' som behövs beroende på om det ska vara en fönsterplats eller inte
-                        String platsTyp = fnstr ? "fönsterplats" : "mittplats";
-                        
-                           //Genom att dela upp platserna för att ge dom en speceiell typ så kan jag säga till så att samma index alltid kommer en speciell plats, som t.ex fönsterplatserna  och så att resten blir mitt eller gångplats som kommer upp i raderna över.
-                        if (ledigPlatsIndex % 2 == 0) {
-                            platsTyp = fnstr ? "fönsterplats" : "gångplats";
+                        if (fnstrPlts.equalsIgnoreCase("y")) {
+                            fnstr = true;
+                        } else if (fnstrPlts.equalsIgnoreCase("n")) {
+                            fnstr = false;
+                        } else {
+                            continue;
                         }
-                        persfält[ledigPlatsIndex] = personnummer;
-                        
-                        //Det här är en snabb lite konfirmation på bokningen så att jag kan se så att allt gick bra och blev rätt
-                        System.out.println("Plats " + ledigPlatsIndex + " (" + platsTyp + ") bokad för person med personnummer " + personnummer + ".");
-                        
-                        
-                    }
+                        bokningV();
 
                     break;
                 case 2:
@@ -92,7 +71,7 @@ public class Buss {
                     break;
                 case 3:
                     System.out.println("Skriv in erat personnummer tack:(ååååmmdd) ");
-                    int pnummer = input.nextInt();
+                    String pnummer = input.next();
                     avBoka(pnummer);
                     break;
                 case 7:
@@ -130,17 +109,35 @@ public class Buss {
             input.nextLine();
     }}
 
-    static int bokningV(int[] fält) {
-        //den här metoden kommer vara det som tar in personnumret som sedan  kommer användas i bokningen
+    static int bokningV() {
         Scanner input = new Scanner(System.in);
-        //med en forloop kan jag leta vart platserna inte har ett person nummer
-        for (int i = 0; i < fält.length; i++) {
-            if (fält[i] == 0) {
+        
+            int ledigPlatsIndex = ledigPlats();
+
+            if (ledigPlatsIndex == -1) {
+                System.out.println("Det finns tyvärr inga lediga platser.");
+            } else {
+                //Här sker äntligen självaste boknningen
                 System.out.println("Skriv in ditt personnummer (ÅÅÅÅMMDD):");
                 int personnummer = input.nextInt();
-                return personnummer;
+                input.nextLine();
+
+                System.out.println("Skriv in ditt namn:");
+                String namn = input.nextLine();
+                //Personnummret och namnet som sparas i variablerna stoppas in i fälten som båda har samma index
+                persfält[ledigPlatsIndex] = personnummer;
+                namnFält[ledigPlatsIndex] = namn;
+                 //Istället för en if statement använder jag dessa operatorer som kollar om något är sant eller falskt och använder av den 'value' som behövs beroende på om det ska vara en fönsterplats eller inte
+                String platsTyp = fnstr ? "fönsterplats" : "mittplats";
+
+                 //Genom att dela upp platserna för att ge dom en speceiell typ så kan jag säga till så att samma index alltid kommer en speciell plats, som t.ex fönsterplatserna  och så att resten blir mitt eller gångplats som kommer upp i raderna över.
+                if (ledigPlatsIndex % 2 == 0) {
+                    platsTyp = fnstr ? "fönsterplats" : "gångplats";
+                }
+                //Det här är en snabb lite konfirmation på bokningen så att jag kan se så att allt gick bra och blev rätt
+                System.out.println("Plats " + ledigPlatsIndex + " (" + platsTyp + ") bokad för " + namn + " (personnummer: " + personnummer + ").");
             }
-        }
+
 
         return 0;
     }
@@ -158,34 +155,26 @@ public class Buss {
     // Detta betyder att bussen är full
     return -1;
 }
-  //här kan jag med hjälp av fnstr sätta ut ett personnummer på rätt index beroende på om d vill ha en fönsterplats eller inte
-    static int bokaPlts(boolean fnstr) {
-        //Med indexen så kan jag säga till så att den hoppar till den typen av plats som söks, så att den bara kan boka innom just de indexerna som till hör t.ex fönsterplats
-    int startIndex = fnstr ? 0 : 2;
-    int endIndex = fnstr ? 1 : 3; 
-    for (int i = startIndex; i <= endIndex; i++) {
-        if (persfält[i] == 0) {
-            return i;
-        }
-    }
-    return bokaPlts(false);
-}
     
-    static void avBoka(int pnummer){
+    static void avBoka(String avbokning) {
+        boolean avbokad = false;
         //Med en forloop kollar jag om det som skrivits in matchar med något av personnummrerna i bokningarna.
-        for(int i = 0; i< persfält.length;i++){
-            if (pnummer == persfält[i]){
-                //När en match hittas så nollställs den platsen och ett medelande skickas ut
+        for (int i = 0; i < namnFält.length; i++) {
+            if (namnFält[i] != null && (namnFält[i].equalsIgnoreCase(avbokning) || String.valueOf(persfält[i]).equals(avbokning))) {
+            //När en match hittas så nollställs den platsen och ett medelande skickas ut
+                namnFält[i] = null;
                 persfält[i] = 0;
-                System.out.println("Du har nu avbokats från plats "+ i);
+                avbokad = true;
+                System.out.println("Bokningen för " + avbokning + " på plats " + i + " har avbokats.");
                 break;
             }
-        if(i>=20 && persfält[i]!= pnummer){
-            //Om vi inte hittar en matchning så ska det medelas till användaren. För at medelandet inte ska skickas ut varje gång somloopen körks så är den i en ifsats som kollar hur många gånger splatser som kollats för en matchning
-        System.out.println("Ingen bokning med personnummret "+pnummer+" har hittats");
         }
+        if (!avbokad) {
+            //Om vi inte hittar en matchning så ska det medelas till användaren. 
+            System.out.println("Ingen bokning hittades för " + avbokning + ".");
         }
     }
+
     
     
     static void mindre(){
