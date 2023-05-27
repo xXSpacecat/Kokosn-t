@@ -37,7 +37,7 @@ public class Buss {
             
             switch (val) {
                 case 1:
-                 //Jag tror jag kunde stoppat in det här i en metod men nu är det för sent
+                    //Fönsterplats frågas om först för att inte börja lägga in en bokning ifall det sker att inga platser kvar
                         System.out.println("Vill du ha en fönsterplats? (y/n)");
                         String fnstrPlts = input.next();
 
@@ -48,6 +48,7 @@ public class Buss {
                         } else {
                             continue;
                         }
+                        //Allt flyttat till en metod istället för att få en en massa parametrar
                         bokningV();
 
                     break;
@@ -70,7 +71,7 @@ public class Buss {
                     }
                     break;
                 case 3:
-                    System.out.println("Skriv in erat personnummer tack:(ååååmmdd) ");
+                    System.out.println("Skriv in erat namn eller personnummer(ååååmmdd) tack: ");
                     String pnummer = input.next();
                     avBoka(pnummer);
                     break;
@@ -93,7 +94,7 @@ public class Buss {
                 
                 case 6:
                     System.out.println("Ange ert personnummer tack: (ååååmmdd)");
-                    int hittap= input.nextInt();
+                    String hittap= input.next();
                     hittaplats(hittap);
                     break;                            
                     
@@ -117,7 +118,7 @@ public class Buss {
             if (ledigPlatsIndex == -1) {
                 System.out.println("Det finns tyvärr inga lediga platser.");
             } else {
-                //Här sker äntligen självaste boknningen
+                //Här sker äntligen självaste bokningen
                 System.out.println("Skriv in ditt personnummer (ÅÅÅÅMMDD):");
                 int personnummer = input.nextInt();
                 input.nextLine();
@@ -182,7 +183,7 @@ public class Buss {
         //som på resterande platser så sker här en jämförelse där om personnumret vid en plats är under myndighetsgränsen så skrivs den ut
         for(int i = 0; i < persfält.length;i++){  
             if (persfält[i]>20060000){
-            System.out.println("Plats " + i + ": " + persfält[i]);   
+            System.out.println("Plats " + i + ": " + persfält[i] +" "+namnFält[i]);   
             }
             else if(i==20 && persfält[i]==0){
                 System.out.println("inga bokningar här än...");
@@ -195,7 +196,7 @@ public class Buss {
         //Det här är samma sak som övre metoden bara att den skriver ut de som är över 18 år
         for(int i = 0; i < persfält.length;i++){  
             if (persfält[i]<20060000 && persfält[i]!=0){
-    System.out.println("Plats " + i + ": " + persfält[i]);         
+    System.out.println("Plats " + i + ": " + persfält[i] +" "+namnFält[i]);         
             }
             else if(i==20 && persfält[i]==0){
                 System.out.println("Inga bokningar här än...");
@@ -205,18 +206,21 @@ public class Buss {
     
      
      
-     static void hittaplats(int pnummer){
+     static void hittaplats(String pnummer){
+         
+        boolean hitta = false;
          //Hittar platsen genom att jämföra i en ifsats med hjälp av en forloop
          for(int i = 0; i< persfält.length;i++){
-            if (pnummer == persfält[i]){
+            if (namnFält[i] != null && (namnFält[i].equalsIgnoreCase(pnummer) || String.valueOf(persfält[i]).equals(pnummer))){
                 System.out.println("Du har plats "+ i);
+                hitta =true;
                 break;
             }
             //För att skicka ut medelandet om plats som inte finns bara ska ske en gång och inte för varje plats den checkar.
-        if(i>=20 && persfält[i]!= pnummer){
+        }
+         if(!hitta){
             
                 System.out.println("Ingen bokning med personnummret "+pnummer+" har hittats");
-        }
         }
          
      }
