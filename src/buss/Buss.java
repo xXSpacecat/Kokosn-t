@@ -31,7 +31,7 @@ public class Buss {
         while (!avstngd) {
             // Då det är ett val typ av system så va det bara logiskt att använda ett switch case här för att sedan leda de till sina respektive metoder
             try{
-            System.out.print("Buss Boknings Meny:\n(1) Boka \n(2) Lista bokade \n(3) Avboka \n(4) Skriv ut total vinst\n(5) Lista obokade platser \n(6) Hitta din plats\n(7) Stäng av\nVad vill du göra?:");
+            System.out.print("Buss Boknings Meny:\n(1) Boka \n(2) Lista bokade \n(3) Avboka \n(4) Skriv ut total vinst\n(5) Lista obokade platser \n(6) Hitta din plats\n(7)Stäng av\nVad vill du göra?:");
 
             int val = input.nextInt();
             
@@ -93,10 +93,10 @@ public class Buss {
                     break;
                 
                 case 6:
-                    System.out.println("Ange ert personnummer tack: (ååååmmdd)");
+                    System.out.println("Ange ertnamn eller personnummer(ååååmmdd) tack: ");
                     String hittap= input.next();
                     hittaplats(hittap);
-                    break;                            
+                    break;   
                     
                 default:
                     System.out.println("Välj mellan 1, 2, 3, 4 och 5 tack.");
@@ -252,8 +252,6 @@ public class Buss {
     }
     return nyVinst;
 }
-
-    
 }
 
     
